@@ -1,0 +1,20 @@
+server:
+  Address: 192.168.0.1/32
+  DNS: 8.8.8.8
+  Endpoint: wireguard.server.com:51840
+  ListenPort: 51820
+  PersistentKeepalive: 30
+  PrivateKey: MNCpSHSCCI8DZaxowFwfEJvdYB5vyorGcfU3/f9VNEg=
+  PublicKey: xfGYUx5oNDcroNKpmeiTskQXXur8KhVAy+eFAn+pFUY=
+
+peers:
+  client0:
+    Address: 192.168.0.10/32
+    AllowedIPs: 0.0.0.0/0
+    PrivateKey: YCWG+4tpJ5OeCquvFZ2uBhxdv1QNWIM48dd0rUbvXnE=
+    PublicKey: 61oq2Xz6WLfO1FSKFbJxbeNS82UHpSdGDG3gLwhpVyU=
+  client1:
+    Address: 192.168.0.11/32
+    AllowedIPs: 0.0.0.0/0
+    PrivateKey: wAFZT/oYLAV0QUOuCJH9edF0tsAF25uxaLJvD2F0624=
+    PublicKey: 5XT4NBr1duyzjq+To3WEax0h256rhXIBTnXDpUXYAUE=
