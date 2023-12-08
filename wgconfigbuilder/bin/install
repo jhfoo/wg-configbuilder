@@ -1,0 +1,4 @@
+pip uninstall wireguard-configbuilder
+#pipx uninstall wireguard-configbuilder
+
+pip install ./dist/wireguard-configbuilder-0.0.4.tar.gz

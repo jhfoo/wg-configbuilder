@@ -4,11 +4,17 @@ server:
   Endpoint: wireguard.server.com:51840
   ListenPort: 51820
   PersistentKeepalive: 30
+  PrivateKey: MDaYLapu2Vu/ASUsgXiL/+YGJf8950afYbpJrG9WkWo=
+  PublicKey: W+0Y+HSxd05U7GvO8RkMlemREN99vcxEH2GDwzhImns=
 
 peers:
   client0:
     Address: 192.168.0.10/32
     AllowedIPs: 0.0.0.0/0
+    PrivateKey: iAUEb13HwDEnZn8A/qOACvJkoi0qP92wbVm9DeMU1Hc=
+    PublicKey: gNRuza4fggwsx79U/r/wUjZtNOcKVblABWPbdbiam0k=
   client1:
     Address: 192.168.0.11/32
     AllowedIPs: 0.0.0.0/0
+    PrivateKey: OPYe2Vc9KLb8sYCSnB8cuuDxQKk661t2KFBda/5YL20=
+    PublicKey: zT/BxmskMjJtLGPwt45C7OEecJL2H0QRCag+YVQcRFk=
