@@ -1,0 +1,18 @@
+PYTHON=python3.9
+
+echo - Setting working directory
+cd "$(dirname $0)/.."
+
+echo - Removing existing venv/
+rm -rf venv
+
+echo - Creating venv/
+$PYTHON -m venv venv
+
+echo - Upgrading Pip
+./venv/bin/$PYTHON -m pip install --upgrade pip
+
+echo - Installing dependencies
+./venv/bin/pip3 install -r requirements.txt
+
+ls -l

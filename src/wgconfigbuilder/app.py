@@ -9,11 +9,14 @@ import wgconfigbuilder.lib.build as build
   
 
 def main():
+  print (f"cwd: {os.getcwd()}")
+
   util.autoCreateFolders()
   parser = util.parseArgs()
 
   args = parser.parse_args()
   args.func(args)
+  
   try:
     # os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
     # print (f'Script path: {os.path.dirname(os.path.abspath(sys.argv[0]))}')

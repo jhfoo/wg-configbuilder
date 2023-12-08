@@ -23,3 +23,6 @@ dependencies = [
 
 [project.scripts]
 wgbuild = "wgconfigbuilder.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

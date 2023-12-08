@@ -1,18 +1,4 @@
-PYTHON=python3.9
+pip uninstall wireguard-configbuilder
+#pipx uninstall wireguard-configbuilder
 
-echo - Setting working directory
-cd "$(dirname $0)/.."
-
-echo - Removing existing venv/
-rm -rf venv
-
-echo - Creating venv/
-$PYTHON -m venv venv
-
-echo - Upgrading Pip
-./venv/bin/$PYTHON -m pip install --upgrade pip
-
-echo - Installing dependencies
-./venv/bin/pip3 install -r requirements.txt
-
-ls -l
+pip install ./dist/wireguard-configbuilder-0.0.4.tar.gz
