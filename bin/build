@@ -1,4 +1,4 @@
 pip uninstall -y wireguard-configbuilder
 #pipx uninstall wireguard-configbuilder
-rm ./dist/*
-python3 -m build
+rm -rf dist
+python3.9 -m build
