@@ -11,7 +11,7 @@ import yaml
 from yaml import Dumper
 
 # custom
-import wgconfigbuilder.lib.util as util
+import wgconfigbuilder.llib.util as util
 import wgconfigbuilder.model.Server as ServerModel
 from wgconfigbuilder.model.Server import Server
 import wgconfigbuilder.model.Peer as PeerModel

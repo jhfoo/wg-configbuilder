@@ -9,7 +9,7 @@ import yaml
 
 # custom
 # import src.lib.util as util
-import wgconfigbuilder.lib.build as build
+import wgconfigbuilder.llib.build as build
 
 KEY_PUBLIC_KEY = 'PublicKey'
 KEY_PRIVATE_KEY = 'PrivateKey'

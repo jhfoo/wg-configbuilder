@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 # custom
-import wgconfigbuilder.lib.util as util
+import wgconfigbuilder.llib.util as util
 
 class Peer(BaseModel):
   id: str

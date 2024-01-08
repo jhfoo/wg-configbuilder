@@ -3,8 +3,8 @@ import sys
 import os
 
 # custom
-import wgconfigbuilder.lib.util as util
-import wgconfigbuilder.lib.build as build
+import wgconfigbuilder.llib.util as util
+import wgconfigbuilder.llib.build as build
 
   
 
