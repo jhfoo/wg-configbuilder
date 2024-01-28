@@ -1,0 +1,16 @@
+PYTHON=python3.9
+
+echo - Installing package dependencies
+sudo pkg install -y rust
+
+echo - Deleting venv/
+rm -rf venv
+
+echo - Creating venv/
+$PYTHON -m venv venv
+
+echo - Upgrading Pip
+./venv/bin/python3 -m pip install --upgrade pip
+
+echo - Installing Python dependencies
+./venv/bin/pip3 install -r requirement.txt
