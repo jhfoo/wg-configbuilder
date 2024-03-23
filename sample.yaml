@@ -15,6 +15,13 @@ peers:
     PublicKey: gNRuza4fggwsx79U/r/wUjZtNOcKVblABWPbdbiam0k=
   client1:
     Address: 192.168.0.11/32
-    AllowedIPs: 0.0.0.0/0
+    AllowedIPs: 192.168.88.0/24
+    MyIPs:
+    - 192.168.99.0/24
+    - 192.168.108.0/24
     PrivateKey: OPYe2Vc9KLb8sYCSnB8cuuDxQKk661t2KFBda/5YL20=
     PublicKey: zT/BxmskMjJtLGPwt45C7OEecJL2H0QRCag+YVQcRFk=
+  client2:
+    Address: 192.168.0.12/32
+    PrivateKey: 8C1fOr038ahRewTflthGok4mjIMuQrRtXMdhhtYXU38=
+    PublicKey: x/AVDMe7DRYfn/EplgiUttkpcvPBJLozwYAv9uKFd1Y=

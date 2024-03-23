@@ -21,6 +21,7 @@ KEY_SERVER_DNS = 'DNS'
 KEY_SERVER_ENDPOINT = 'Endpoint'
 
 KEY_PEER_ALLOWED_IPS = 'AllowedIPs'
+KEY_PEER_MY_IPS = 'MyIPs'
 
 def generatePublicPrivateKeys(TempPath):
   if not os.path.exists(TempPath):
@@ -87,6 +88,7 @@ def parseArgs():
   TestParser.set_defaults(func = test)
 
   # cmd BUILD parser
+  # print (f'[debug] parseArgs()')
   BuildParser = subparser.add_parser('build', help = 'Build config files')
   BuildParser.add_argument('filename', help = 'YAML file')
   BuildParser.set_defaults(func = build.build)

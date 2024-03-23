@@ -37,9 +37,13 @@ PrivateKey = {server.PrivateKey}
 
   return ret
 
-def renderPeer(peer: Peer):
+def renderServerSidePeer(peer: Peer):
+  PeerIps = [peer.Address]
+  if not peer.MyIPs == None:
+    PeerIps += peer.MyIPs
+
   ret = f"""[Peer]
-AllowedIPs = {peer.AllowedIPs}
+AllowedIPs = {', '.join(PeerIps)}
 PublicKey = {peer.PublicKey}
 """
   return ret
@@ -61,7 +65,7 @@ def renderServerConf(server: Server, peers: List[Peer]):
   ret = renderServer(server) + '\n'
 
   for peer in peers:
-    ret += renderPeer(peer) + '\n'
+    ret += renderServerSidePeer(peer) + '\n'
 
   return ret
 
@@ -120,6 +124,7 @@ def writeYamlFile(config, ConfigFname):
 
 
 def build(args):
+  # print (f'debug: build.build()')
   util.isFileExist(args.filename)
   config = util.isValidYaml(args.filename)
   server = ServerModel.getModel(config['server'])

@@ -2,15 +2,18 @@
 import sys
 import os
 
+# print ('sys.path: ' + "\n".join(sys.path))
+# print ('os.cwd: ' + os.getcwd())
+
+# print (f"__name__: {__name__}")
+if __name__ == '__main__':
+  sys.path.append(os.getcwd() + '/src')
+
 # custom
 import wgconfigbuilder.llib.util as util
 import wgconfigbuilder.llib.build as build
 
-  
-
 def main():
-  print (f"cwd: {os.getcwd()}")
-
   util.autoCreateFolders()
   parser = util.parseArgs()
 
@@ -18,6 +21,10 @@ def main():
   args.func(args)
   
   try:
+    parser = util.parseArgs()
+    args = parser.parse_args()
+
+    # args.func(args)    
     # os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
     # print (f'Script path: {os.path.dirname(os.path.abspath(sys.argv[0]))}')
     True
@@ -36,6 +43,5 @@ def main():
   # import configbuilder.lib.mymodule as mymodule
   # mymodule.say()
 
-print (f"__name__: {__name__}")
 if __name__ == '__main__':
   main()
