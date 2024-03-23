@@ -1,0 +1,6 @@
+echo == Uninstall existing
+./venv/bin/pip3 uninstall wireguard-configbuilder
+#pipx uninstall wireguard-configbuilder
+
+echo == Installing
+./venv/bin/pip3 install ./dist/wireguard-configbuilder-0.0.5.tar.gz

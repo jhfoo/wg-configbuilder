@@ -1,4 +1,7 @@
-pip uninstall -y wireguard-configbuilder
+echo == Uninstall existing 
+./venv/bin/pip uninstall -y wireguard-configbuilder
 #pipx uninstall wireguard-configbuilder
 rm -rf dist
-python3.9 -m build
+
+echo == Building
+./venv/bin/python3 -m build
