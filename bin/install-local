@@ -1,0 +1,6 @@
+echo == Uninstall existing
+pip uninstall wgconfigubuilder
+#pipx uninstall wgconfigbuilder
+
+echo == Installing
+pip install ./dist/wgconfigbuilder-0.0.5.tar.gz

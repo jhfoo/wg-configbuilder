@@ -2,6 +2,9 @@
 import sys
 import os
 
+# community
+import pkg_resources
+
 # print ('sys.path: ' + "\n".join(sys.path))
 # print ('os.cwd: ' + os.getcwd())
 
@@ -14,6 +17,9 @@ import wgconfigbuilder.llib.util as util
 import wgconfigbuilder.llib.build as build
 
 def main():
+  if not __name__ == '__main__':
+    print (f'wgconfigbuilder v{pkg_resources.get_distribution("wgconfigbuilder").version}')
+
   util.autoCreateFolders()
   parser = util.parseArgs()
 
