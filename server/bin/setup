@@ -13,4 +13,5 @@ echo - Upgrading Pip
 ./venv/bin/python3 -m pip install --upgrade pip
 
 echo - Installing Python dependencies
-./venv/bin/pip3 install -r requirement.txt
+./bin/pip-install-requirements
+#./venv/bin/pip3 install -r conf/requirement.txt

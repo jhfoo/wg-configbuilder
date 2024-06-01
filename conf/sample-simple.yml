@@ -1,0 +1,12 @@
+server:
+  Address: 192.168.0.1/32
+  DNS: 192.168.0.1
+  Endpoint: wireguard.kungfoo.info:51820
+  ListenPort: 51820
+  PersistentKeepalive: 30
+
+peers:
+  client1:
+    Address: 192.168.0.11/32
+  client2:
+    Address: 192.168.0.12/32
