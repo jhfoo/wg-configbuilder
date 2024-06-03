@@ -7,6 +7,7 @@ class Interface:
   def __init__(self):
     self.peers = []
     self.attr = {}
+    self.id = None
 
   def __str__(self):
     FakeAttr = copy.deepcopy(self.attr)
@@ -26,8 +27,8 @@ class WireguardStatus:
 
   @classmethod
   def parseWgShow(self, RawData):
-    interfaces = []
-    ThisInterface = Interface()
+    interfaces = {}
+    ThisInterface = None
     ThisPeer = None
     ThisState = None
 
@@ -42,18 +43,17 @@ class WireguardStatus:
         print (f"key = {key}, value = {value}")
         if key == 'interface':
           print (f"New interface")
-          if not ThisPeer is None:
-            ThisInterface.peers.append(ThisPeer)
-            ThisPeer = None
-          interfaces.append(ThisInterface)
-          ThisState = key
+
           ThisInterface = Interface()
+          ThisInterface.id = value
+          interfaces[value] = ThisInterface
+          ThisPeer = None
+          ThisState = key
         elif key == 'peer':
           print (f"New peer")
-          if not ThisPeer is None:
-            ThisInterface.peers.append(ThisPeer)
           ThisState = key
           ThisPeer = Peer()
+          ThisInterface.peers.append(ThisPeer)
         else:
           if ThisState == 'interface':
             ThisInterface.attr[key] = value
@@ -61,9 +61,6 @@ class WireguardStatus:
             ThisPeer.attr[key] = value
       # print (line)
 
-    ThisInterface.peers.append(ThisPeer)
-    interfaces.append(ThisInterface)
-    interfaces.pop(0)
     return interfaces
 
   def __str__(self):

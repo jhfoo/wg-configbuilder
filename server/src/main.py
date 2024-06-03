@@ -25,12 +25,9 @@ async def doShellCmd(cmd):
   print (f"process.returncode: {process.returncode}")
   interfaces = WireguardStatus.parseWgShow(stdout.decode('utf-8'))
 
-  ret = []
-  for interface in interfaces:
-    ret.append(interface)
   print (f"stderr: {stderr.decode('utf-8')}")
 
-  return ret
+  return interfaces
 
 @app.get("/")
 def read_root():
