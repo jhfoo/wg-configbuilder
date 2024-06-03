@@ -16,6 +16,7 @@ class Interface:
     self.attr = {}
     self.id = None
     self.ip = None
+    self.isServer = True
 
   def __str__(self):
     FakeAttr = copy.deepcopy(self.attr)
@@ -67,6 +68,8 @@ class WireguardStatus:
             ThisInterface.attr[key] = value
           elif ThisState == 'peer':
             ThisPeer.attr[key] = value
+            if key == 'persistent keepalive':
+              ThisInterface.isServer = False
       # print (line)
 
     # get local endpoint address
