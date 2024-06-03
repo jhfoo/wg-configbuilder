@@ -39,7 +39,8 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get('/api/wireguard/status')
 async def testShell():
-  return await doShellCmd('wg show')
+  interfaces = await doShellCmd('wg show')
+  return interfaces
 
 if __name__ == "__main__":
   uvicorn.run("main:app", port=8000, host='0.0.0.0', log_level="info")

@@ -1,13 +1,21 @@
-
 # core
 import copy
 import re
+
+# community
+import psutil
+
+class IpAddr:
+  def __init__(self, addr, netmask):
+    self.addr = addr
+    self.netmask = netmask
 
 class Interface:
   def __init__(self):
     self.peers = []
     self.attr = {}
     self.id = None
+    self.ip = None
 
   def __str__(self):
     FakeAttr = copy.deepcopy(self.attr)
@@ -60,6 +68,13 @@ class WireguardStatus:
           elif ThisState == 'peer':
             ThisPeer.attr[key] = value
       # print (line)
+
+    # get local endpoint address
+    networks = psutil.net_if_addrs()
+    for interface in interfaces:
+      if interface in networks:
+        addr = networks[interface][0]
+        interfaces[interface].ip = IpAddr(addr.address, addr.netmask) 
 
     return interfaces
 
