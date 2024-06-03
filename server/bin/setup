@@ -1,17 +1,25 @@
+#!/usr/local/bin/zsh
 PYTHON=python3.9
 
-echo - Installing package dependencies
+echo "- Installing package dependencies"
 sudo pkg install -y rust
 
-echo - Deleting venv/
+echo "- Deleting venv/"
 rm -rf venv
 
-echo - Creating venv/
-$PYTHON -m venv venv
+echo "- Creating venv/"
+$PYTHON -m venv venv --system-site-packages
 
-echo - Upgrading Pip
+echo "- Upgrading Pip"
 ./venv/bin/python3 -m pip install --upgrade pip
 
-echo - Installing Python dependencies
-./bin/pip-install-requirements
-#./venv/bin/pip3 install -r conf/requirement.txt
+echo "- Installing Python dependencies"
+if [[ "$1" == "nocache" ]] 
+then 
+  echo "- Using public Python dependencies"
+  ./venv/bin/pip3 install -r conf/requirements.txt
+else
+  echo "- Using cached Python dependencies"
+  ./bin/pip-install-requirements
+fi
+
