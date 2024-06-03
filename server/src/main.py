@@ -10,24 +10,9 @@ from yaml import Loader, Dumper
 import yaml
 
 # custom
-from src.classes.WireguardStatus import WireguardStatus
+from src.classes.Wireguard import Wireguard
 
 app = FastAPI()
-
-async def doShellCmd(cmd):
-  process = await asyncio.create_subprocess_shell(
-    cmd,
-    stdout = subprocess.PIPE,
-    stderr = subprocess.PIPE
-  )
-
-  stdout, stderr = await process.communicate()
-  print (f"process.returncode: {process.returncode}")
-  interfaces = WireguardStatus.parseWgShow(stdout.decode('utf-8'))
-
-  print (f"stderr: {stderr.decode('utf-8')}")
-
-  return interfaces
 
 @app.get("/")
 def read_root():
@@ -39,8 +24,7 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get('/api/wireguard/status')
 async def testShell():
-  interfaces = await doShellCmd('wg show')
-  return interfaces
+  return await Wireguard.getStatus()
 
 if __name__ == "__main__":
   uvicorn.run("main:app", port=8000, host='0.0.0.0', log_level="info")
