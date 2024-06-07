@@ -15,7 +15,7 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>{{ isProduction ? 'PROD':'DEV' }} | v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -52,6 +52,13 @@ import EssentialLink from 'components/EssentialLink.vue'
 defineOptions({
   name: 'MainLayout'
 })
+
+const isProduction = ref(false)
+
+if (process.env.PROD) {
+  isProduction.value = true
+  console.log('isProduction: true')
+}
 
 const linksList = [
   {
