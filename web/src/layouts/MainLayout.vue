@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Wireguard ConfigBuilder
         </q-toolbar-title>
 
         <div>{{ isProduction ? 'PROD':'DEV' }} | v{{ $q.version }}</div>
@@ -40,7 +40,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+        <router-view />
     </q-page-container>
   </q-layout>
 </template>

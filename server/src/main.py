@@ -7,6 +7,7 @@ from typing import Union
 import uvicorn
 from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from yaml import Loader, Dumper
 import yaml
 
@@ -14,6 +15,19 @@ import yaml
 from src.classes.Wireguard import Wireguard
 
 app = FastAPI()
+
+origins = [
+  '*'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
