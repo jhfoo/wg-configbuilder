@@ -1,0 +1,15 @@
+#!/usr/local/bin/zsh
+
+echo "- Removing existing dist/"
+rm -rf dist
+
+echo "- Building static pages"
+npm run build
+
+read -q "ISCONT?Update pages to server/public/?"
+
+echo "- Removing existing server/public/"
+rm -rf ../server/public
+
+echo "- Copying pages to server/public/"
+cp -r dist/spa/ ../server/public
