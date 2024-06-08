@@ -40,6 +40,9 @@ var LastTestedGoodPath = null
 
 onMounted(async () => {
   // WgStatus.value = await testPath(getApiBaseUrl(), )
+  const resp = await axios.get(getApiBaseUrl() + '/api/config/path')
+  ConfigFullFname.value = resp.data
+  onPathChanged(resp.data)
 })
 
 function onPathChanged(NewValue) {

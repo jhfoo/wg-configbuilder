@@ -46,9 +46,18 @@ async def testShell():
 class ConfigPath(BaseModel):
   path: str
 
+@app.get('/api/config/path')
+async def getPath():
+  AppConfig = ConfigMgr.getAppConfig()
+  return AppConfig['WireguardConfig'] if 'WireguardConfig' in AppConfig else ''
+
+@app.post('/api/config/path')
+async def savePath(config: ConfigPath):
+  return ConfigMgr.saveConfigPath(config.path)
+
 @app.post('/api/config/path/test')
 async def testPath(config: ConfigPath):
-  return await ConfigMgr.testConfigPath(config.path)
+  return ConfigMgr.testConfigPath(config.path)
 
 app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
