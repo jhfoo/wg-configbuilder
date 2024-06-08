@@ -9,6 +9,7 @@ from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from yaml import Loader, Dumper
+from pydantic import BaseModel
 import yaml
 
 # custom
@@ -41,6 +42,13 @@ async def testShell():
 @app.get('/api/wireguard/config')
 async def testShell():
   return await ConfigMgr.getStatus()
+
+class ConfigPath(BaseModel):
+  path: str
+
+@app.post('/api/config/path/test')
+async def testPath(config: ConfigPath):
+  return await ConfigMgr.testConfigPath(config.path)
 
 app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
