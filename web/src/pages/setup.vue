@@ -1,7 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    url: {{ WgStatus }}<br/>
-    hello
+    setup [{{ WgStatus }}]
   </q-page>
 </template>
 
@@ -23,7 +22,7 @@ onMounted(async () => {
 })
 
 async function getWgStatus(ServiceUrl) {
-  const resp = await axios.get(ServiceUrl + '/api/wireguard/status')
+  const resp = await axios.get(ServiceUrl + '/api/wireguard/config')
   console.log(resp.data)
   return resp.data
 }

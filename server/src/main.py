@@ -13,6 +13,7 @@ import yaml
 
 # custom
 from src.classes.Wireguard import Wireguard
+from src.classes.ConfigMgr import ConfigMgr
 
 app = FastAPI()
 
@@ -36,6 +37,10 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.get('/api/wireguard/status')
 async def testShell():
   return await Wireguard.getStatus()
+
+@app.get('/api/wireguard/config')
+async def testShell():
+  return await ConfigMgr.getStatus()
 
 app.mount("/", StaticFiles(directory="public", html=True), name="public")
 

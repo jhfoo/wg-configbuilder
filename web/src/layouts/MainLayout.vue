@@ -62,10 +62,10 @@ if (process.env.PROD) {
 
 const linksList = [
   {
-    title: 'Docs',
+    title: 'Setup',
     caption: 'quasar.dev',
     icon: 'school',
-    link: 'https://quasar.dev'
+    link: 'setup'
   },
   {
     title: 'Github',
