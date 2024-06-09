@@ -3,14 +3,65 @@
   <q-page class="">
     <div class="row">
       <div class="col-8">
-        <q-card class="q-ma-md">
+        <q-card class="q-ma-md" style="max-width: 500px;">
+          <q-toolbar class="bg-transparent text-teal">
+            <q-toolbar-title>Server</q-toolbar-title>
+            <q-space />
+            <q-tabs v-model="tab" shrink>
+              <q-tab name="tab2" label="Reset" />
+              <q-tab name="tab3" label="Save" />
+            </q-tabs>
+          </q-toolbar>
           <q-card-section>
-            <q-input bottom-slots v-model="ConfigFullFname" @update:model-value="onPathChanged" label="VPN Config Full Filename">
-              <template v-slot:after>
-                <q-btn @click="onTestPath" :disable="isTestDisabled" v-model="ConfigFullFname" flat color="white" text-color="black" label="Test" />
-                <q-btn @click="onSavePath" :disable="isSaveDisabled" flat color="pink" text-color="black" label="Save" />
+            <q-item-label>SELF</q-item-label>
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="IP Address" hint="This server's address in CIDR (xxx.xxx.xxx.xxx/xx) format" dense filled>
+              <template v-slot:before>
+                <q-icon name="home" />
               </template>
             </q-input>
+            <q-separator class="q-mt-md" />
+
+            <q-item-label class="q-mt-md">CONNECTION</q-item-label>
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="Endpoint" hint="Address clients connect to" dense filled>
+              <template v-slot:before>
+                <q-icon name="vpn_lock" />
+              </template>
+            </q-input>
+
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="ListenPort" hint="Port clients connect to" dense filled>
+              <template v-slot:before>
+                <q-icon name="numbers" />
+              </template>
+            </q-input>
+            <q-separator class="q-mt-md" />
+
+            <q-item-label class="q-mt-md">AUTHENTICATION</q-item-label>
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PrivateKey" hint="Private key (DO NOT SHARE)" dense filled>
+              <template v-slot:before>
+                <q-icon name="key" />
+              </template>
+            </q-input>
+
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PublicKey" hint="Public key (ok to share)" dense filled>
+              <template v-slot:before>
+                <q-icon name="public" />
+              </template>
+            </q-input>
+            <q-separator class="q-mt-md" />
+
+            <q-item-label class="q-mt-md">POST CONNECTION</q-item-label>
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PersistentKeepalive" hint="Heartbeat(sec)" dense filled>
+              <template v-slot:before>
+                <q-icon name="favorite" />
+              </template>
+            </q-input>
+
+            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="DNS" hint="DNS overwrite after connection" dense filled>
+              <template v-slot:before>
+                <q-icon name="menu_book" />
+              </template>
+            </q-input>
+
           </q-card-section>
           <q-banner v-if="isShowBanner" class="bg-primary text-white">
             {{ BannerConfig.message }}

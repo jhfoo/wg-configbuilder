@@ -16,6 +16,10 @@ class ConfigMgr:
     return {}
 
   @classmethod
+  def getWireguardConfig(self):
+    return ''
+
+  @classmethod
   def getAppConfig(self):
     with open('conf/app.yaml','r') as infile:
       config = yaml.load(infile.read(), Loader = Loader)
@@ -50,13 +54,36 @@ class ConfigMgr:
     RespDescription = ''
 
     if os.path.isfile(path):
-      RespStatus = 'ok'
+      return {
+        'status': 'ok'
+      }
     else:
-      RespStatus = 'error'
-      RespDescription = f"Not a file: {path}"
+      ret = {
+        'status': 'error',
+        'description': f"Not a file: {path}"
+      }
 
-    return {
-      'status': RespStatus,
-      'description': RespDescription,
-      'path': path
-    }
+      dir = []
+      if os.path.isdir(path):
+        if path.endswith('/'):
+          path = path[:-1]
+        for DirItem in os.listdir(path):
+          FullFname = f"{path}/{DirItem}"
+          if os.path.isfile(FullFname):
+            # only match extensions included
+            if DirItem.endswith('.yml') or DirItem.endswith('.yaml'):
+              dir.append({
+                'ShortName': DirItem,
+                'LongName': FullFname,
+                'isFile': True
+              })
+          else:
+            dir.append({
+              'ShortName': DirItem,
+              'LongName': FullFname,
+              'isFile': False
+            })
+          print (f"{DirItem}: {path}/{DirItem}")
+
+      ret['dir'] = dir
+      return ret

@@ -1,1 +1,1 @@
-WireguardConfig: ../server/conf/app.yaml
+WireguardConfig: ../../infra-as-code/wireguard/config.kovan.yml
