@@ -14,7 +14,12 @@
           </q-toolbar>
           <q-card-section>
             <q-item-label>SELF</q-item-label>
-            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="IP Address" hint="This server's address in CIDR (xxx.xxx.xxx.xxx/xx) format" dense filled>
+            <q-input bottom-slots dense filled
+              v-model="ServerAddress"
+              class="q-mt-sm" 
+              label="IP Address" 
+              placeholder="192.168.0.1/24"
+              hint="This server's address in CIDR (xxx.xxx.xxx.xxx/xx) format">
               <template v-slot:before>
                 <q-icon name="home" />
               </template>
@@ -22,13 +27,23 @@
             <q-separator class="q-mt-md" />
 
             <q-item-label class="q-mt-md">CONNECTION</q-item-label>
-            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="Endpoint" hint="Address clients connect to" dense filled>
+            <q-input bottom-slots dense filled 
+              v-model="ServerAddress" 
+              class="q-mt-sm" 
+              label="Endpoint" 
+              placeholder="host.your.domain"
+              hint="Address clients connect to">
               <template v-slot:before>
                 <q-icon name="vpn_lock" />
               </template>
             </q-input>
 
-            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="ListenPort" hint="Port clients connect to" dense filled>
+            <q-input bottom-slots dense filled
+              v-model="ServerListenPort" 
+              class="q-mt-sm" 
+              label="ListenPort" 
+              placeholder="51820"
+              hint="Port clients connect to">
               <template v-slot:before>
                 <q-icon name="numbers" />
               </template>
@@ -106,6 +121,8 @@ const isSaveDisabled = ref(true)
 const isShowBanner = ref(false)
 const BannerConfig = {}
 const DirItems = ref([])
+const ServerAddress = ref(null)
+const ServerListenPort = ref(null)
 
 var LastTestedGoodPath = null
 
