@@ -22,3 +22,22 @@ async def savePath(config: ConfigPath):
 @router.post('/path/test')
 async def testPath(config: ConfigPath):
   return ConfigMgr.testConfigPath(config.path)
+
+class ServerConfig(BaseModel):
+  ServerAddress: str
+  Endpoint: str
+
+class FullConfig(BaseModel):
+  server: ServerConfig
+
+@router.get('/')
+async def getConfig():
+  return ConfigMgr.getWireguardConfig()
+
+@router.post('/')
+async def saveConfig(NewConfig: FullConfig):
+  OrigConfig = ConfigMgr.getWireguardConfig()
+  print (OrigConfig)
+  print (NewConfig.server)
+  ConfigMgr.saveWireguardConfig(NewConfig)
+  pass

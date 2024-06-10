@@ -9,7 +9,7 @@
             <q-space />
             <q-tabs v-model="tab" shrink>
               <q-tab name="tab2" label="Reset" />
-              <q-tab name="tab3" label="Save" />
+              <q-tab @click="onSaveServer" name="tab3" label="Save" />
             </q-tabs>
           </q-toolbar>
           <q-card-section>
@@ -28,7 +28,7 @@
 
             <q-item-label class="q-mt-md">CONNECTION</q-item-label>
             <q-input bottom-slots dense filled 
-              v-model="ServerAddress" 
+              v-model="ServerEndpoint" 
               class="q-mt-sm" 
               label="Endpoint" 
               placeholder="host.your.domain"
@@ -64,8 +64,13 @@
             </q-input>
             <q-separator class="q-mt-md" />
 
-            <q-item-label class="q-mt-md">POST CONNECTION</q-item-label>
-            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PersistentKeepalive" hint="Heartbeat(sec)" dense filled>
+            <q-item-label class="q-mt-md">OPTIONAL</q-item-label>
+            <q-input bottom-slots dense filled
+              v-model="ServerAddress" 
+              class="q-mt-sm" 
+              label="PersistentKeepalive" 
+              placeholder="30"
+              hint="Heartbeat(sec)">
               <template v-slot:before>
                 <q-icon name="favorite" />
               </template>
@@ -78,26 +83,11 @@
             </q-input>
 
           </q-card-section>
-          <q-banner v-if="isShowBanner" class="bg-primary text-white">
-            {{ BannerConfig.message }}
-            <template v-slot:action>
-              <q-btn flat color="white" label="Dismiss" />
-              <q-btn flat color="white" label="Update Credit Card" />
-            </template>
-          </q-banner>
         </q-card>
       </div>
       <div class="col-4">
         <div class="q-my-md q-mr-md">
           <div>
-            Directory
-            <q-list dense padding class="rounded-borders">
-              <q-item v-for="item in DirItems" @click="onSelectDirItem(item.LongName)" clickable v-ripple>
-                <q-item-section>
-                  {{item.ShortName}}
-                </q-item-section>
-              </q-item>
-            </q-list>
           </div>
         </div>
       </div>
@@ -115,85 +105,43 @@ defineOptions({
 });
 
 const $q = useQuasar()
-const ConfigFullFname = ref(null)
-const isTestDisabled = ref(true)
-const isSaveDisabled = ref(true)
-const isShowBanner = ref(false)
-const BannerConfig = {}
-const DirItems = ref([])
 const ServerAddress = ref(null)
+const ServerEndpoint = ref(null)
 const ServerListenPort = ref(null)
 
 var LastTestedGoodPath = null
 
 onMounted(async () => {
-  // WgStatus.value = await testPath(getApiBaseUrl(), )
-  const resp = await axios.get(getApiBaseUrl() + '/api/config/path')
-  ConfigFullFname.value = resp.data
-  onPathChanged(resp.data)
-})
+  const resp = await axios.get(getApiBaseUrl() + '/api/config/')
+  const WgConfig = resp.data
+  if ('server' in WgConfig) {
+    if ('ServerAddress' in WgConfig.server) {
+      ServerAddress.value = WgConfig.server.ServerAddress
+    }
+    if ('Endpoint' in WgConfig.server) {
+      ServerEndpoint.value = WgConfig.server.Endpoint
+    }
 
-function onSelectDirItem(SelectedFullFname) {
-  ConfigFullFname.value = SelectedFullFname
-  onTestPath()
-}
-
-function onPathChanged(NewValue) {
-  isTestDisabled.value = (NewValue.length === 0)
-
-  // console.log(`onPathChanged: ${NewValue}`)
-  if (NewValue === LastTestedGoodPath) {
-    isSaveDisabled.value = false
-  } else {
-    isSaveDisabled.value = true
   }
-}
+  console.log(WgConfig)
+})
 
 function getApiBaseUrl() {
   const ServicePort = process.env.PROD ? document.location.port : 8000
   return `${document.location.protocol}//${document.location.hostname}:${ServicePort}` 
 }
 
-async function onSavePath() {
-  const resp = await axios.post(getApiBaseUrl() + '/api/config/path', {
-    path: ConfigFullFname.value
+async function onSaveServer() {
+  console.log(`onSaveServer()`)
+  const resp = await axios.post(getApiBaseUrl() + '/api/config/', {
+    server: {
+      ServerAddress: ServerAddress.value,
+      Endpoint: ServerEndpoint.value,
+    }
   })
   console.log(resp.data)
   if (resp.data.status === 'ok') {
   }
 }
 
-async function onTestPath() {
-  const resp = await axios.post(getApiBaseUrl() + '/api/config/path/test', {
-    path: ConfigFullFname.value
-  })
-  console.log(resp.data)
-  if (resp.data.status === 'ok') {
-    BannerConfig.message = 'Path is valid.'
-
-    $q.notify({
-      message: BannerConfig.message,
-      color: 'primary',
-      multiLine: true,
-      avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-      // actions: [
-      //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
-      // ]
-    })
-
-    // isShowBanner.value = true
-
-    isSaveDisabled.value = false
-    LastTestedGoodPath = ConfigFullFname.value
-    return
-  }
-
-  // else
-  // check if path is a directory
-  if ('dir' in resp.data) {
-    DirItems.value = resp.data.dir
-  }
-
-  return resp.data
-}
 </script>

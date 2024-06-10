@@ -10,18 +10,66 @@ try:
 except ImportError:
   from yaml import Loader, Dumper
 
+FILE_APP_CONFIG = 'conf/app.yaml'
+KEY_SERVER = 'server'
+KEY_PEERS = 'peers'
+KEY_SERVER_ADDRESS = 'ServerAddress'
+KEY_SERVER_ENDPOINT = 'Endpoint'
+KEY_WIREGUARD_CONFIG = 'WireguardConfig'
+
 class ConfigMgr:
   @classmethod
   async def getStatus(self):
     return {}
 
   @classmethod
+  def saveWireguardConfig(self, NewConfig):
+    WgConfig = self.getWireguardConfig()
+
+    if NewConfig.server.ServerAddress:
+      WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.ServerAddress
+
+    if NewConfig.server.Endpoint:
+      WgConfig[KEY_SERVER][KEY_SERVER_ENDPOINT] = NewConfig.server.Endpoint
+
+    AppConfig = self.getAppConfig()
+    with open(AppConfig[KEY_WIREGUARD_CONFIG],'w') as outfile:
+      outfile.write(yaml.dump(WgConfig, Dumper = Dumper))
+
+    print (f"Final WgConfig: {WgConfig}")
+
+  @classmethod
   def getWireguardConfig(self):
-    return ''
+    AppConfig = self.getAppConfig()
+    if AppConfig is None:
+      return None
+
+    if not KEY_WIREGUARD_CONFIG in AppConfig:
+      return None
+
+    if not os.path.isfile(AppConfig[KEY_WIREGUARD_CONFIG]):
+      return None
+
+    with open(AppConfig[KEY_WIREGUARD_CONFIG],'r') as infile:
+      WgConfig = yaml.load(infile.read(), Loader = Loader)
+    
+    if WgConfig is None:
+      WgConfig = {}
+
+    if not KEY_SERVER in WgConfig:
+      WgConfig[KEY_SERVER] = {}
+
+    if not KEY_PEERS in WgConfig:
+      WgConfig[KEY_PEERS] = {}
+
+    return WgConfig
 
   @classmethod
   def getAppConfig(self):
-    with open('conf/app.yaml','r') as infile:
+    if not os.path.isfile(FILE_APP_CONFIG):
+      return None
+
+    with open(FILE_APP_CONFIG,'r') as infile:
       config = yaml.load(infile.read(), Loader = Loader)
       if config == None:
         return {}
@@ -30,7 +78,7 @@ class ConfigMgr:
 
   @classmethod
   def saveAppConfig(self, AppConfig):
-    with open('conf/app.yaml','w') as outfile:
+    with open(FILE_APP_CONFIG,'w') as outfile:
       outfile.write(yaml.dump(AppConfig, Dumper = Dumper))
 
   @classmethod
@@ -40,10 +88,10 @@ class ConfigMgr:
       AppConfig = self.getAppConfig()
       print(AppConfig)
 
-      if not 'WireguardConfig' in AppConfig:
-        AppConfig['WireguardConfig'] = ''
+      if not KEY_WIREGUARD_CONFIG in AppConfig:
+        AppConfig[KEY_WIREGUARD_CONFIG] = ''
 
-      AppConfig['WireguardConfig'] = path
+      AppConfig[KEY_WIREGUARD_CONFIG] = path
       self.saveAppConfig(AppConfig)
 
     return 'ok'
