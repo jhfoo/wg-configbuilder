@@ -16,6 +16,9 @@ KEY_PEERS = 'peers'
 KEY_SERVER_ADDRESS = 'ServerAddress'
 KEY_SERVER_ENDPOINT = 'Endpoint'
 KEY_WIREGUARD_CONFIG = 'WireguardConfig'
+KEY_LISTEN_PORT = 'ListenPort'
+KEY_CLIENT_DEFAULT_DNS = 'DNS'
+KEY_CLIENT_DEFAULT_KEEPALIVE = 'PersistentKeepalive'
 
 class ConfigMgr:
   @classmethod
@@ -26,11 +29,17 @@ class ConfigMgr:
   def saveWireguardConfig(self, NewConfig):
     WgConfig = self.getWireguardConfig()
 
-    if NewConfig.server.ServerAddress:
-      WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.ServerAddress
+    WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.ServerAddress
+    WgConfig[KEY_SERVER][KEY_SERVER_ENDPOINT] = NewConfig.server.Endpoint
+    WgConfig[KEY_SERVER][KEY_CLIENT_DEFAULT_DNS] = NewConfig.server.dns
 
-    if NewConfig.server.Endpoint:
-      WgConfig[KEY_SERVER][KEY_SERVER_ENDPOINT] = NewConfig.server.Endpoint
+    # default to 51820
+    ListenPort = NewConfig.server.ListenPort or 51820
+    WgConfig[KEY_SERVER][KEY_LISTEN_PORT] = ListenPort
+
+    # default to 30
+    PersistentKeepalive = NewConfig.server.PersistentKeepalive or 30
+    WgConfig[KEY_SERVER][KEY_CLIENT_DEFAULT_KEEPALIVE] = PersistentKeepalive
 
     AppConfig = self.getAppConfig()
     with open(AppConfig[KEY_WIREGUARD_CONFIG],'w') as outfile:

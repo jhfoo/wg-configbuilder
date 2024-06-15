@@ -66,7 +66,7 @@
 
             <q-item-label class="q-mt-md">OPTIONAL</q-item-label>
             <q-input bottom-slots dense filled
-              v-model="ServerAddress" 
+              v-model="ServerPersistentKeepalive" 
               class="q-mt-sm" 
               label="PersistentKeepalive" 
               placeholder="30"
@@ -76,7 +76,11 @@
               </template>
             </q-input>
 
-            <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="DNS" hint="DNS overwrite after connection" dense filled>
+            <q-input bottom-slots  dense filled
+              v-model="ServerDns" 
+              class="q-mt-sm" 
+              label="DNS" 
+              hint="DNS overwrite after connection">
               <template v-slot:before>
                 <q-icon name="menu_book" />
               </template>
@@ -108,10 +112,16 @@ const $q = useQuasar()
 const ServerAddress = ref(null)
 const ServerEndpoint = ref(null)
 const ServerListenPort = ref(null)
+const ServerDns = ref(null)
+const ServerPersistentKeepalive = ref(null)
 
 var LastTestedGoodPath = null
 
 onMounted(async () => {
+  await loadServerConfig()
+})
+
+async function loadServerConfig() {
   const resp = await axios.get(getApiBaseUrl() + '/api/config/')
   const WgConfig = resp.data
   if ('server' in WgConfig) {
@@ -121,10 +131,19 @@ onMounted(async () => {
     if ('Endpoint' in WgConfig.server) {
       ServerEndpoint.value = WgConfig.server.Endpoint
     }
-
+    if ('ListenPort' in WgConfig.server) {
+      ServerListenPort.value = WgConfig.server.ListenPort
+    }
+    if ('DNS' in WgConfig.server) {
+      ServerDns.value = WgConfig.server.DNS
+    }
+    if ('PersistentKeepalive' in WgConfig.server) {
+      ServerPersistentKeepalive.value = WgConfig.server.PersistentKeepalive
+    }
+    
   }
   console.log(WgConfig)
-})
+} 
 
 function getApiBaseUrl() {
   const ServicePort = process.env.PROD ? document.location.port : 8000
@@ -135,10 +154,14 @@ async function onSaveServer() {
   console.log(`onSaveServer()`)
   const resp = await axios.post(getApiBaseUrl() + '/api/config/', {
     server: {
-      ServerAddress: ServerAddress.value,
-      Endpoint: ServerEndpoint.value,
+      ServerAddress: ServerAddress.value ??= '',
+      Endpoint: ServerEndpoint.value ??= '',
+      dns: ServerDns.value,
+      ListenPort: ServerListenPort.value || 0,
+      PersistentKeepalive: ServerPersistentKeepalive.value || 0,
     }
   })
+  await loadServerConfig()
   console.log(resp.data)
   if (resp.data.status === 'ok') {
   }

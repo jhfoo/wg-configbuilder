@@ -26,6 +26,9 @@ async def testPath(config: ConfigPath):
 class ServerConfig(BaseModel):
   ServerAddress: str
   Endpoint: str
+  ListenPort: int
+  PersistentKeepalive: int
+  dns: str
 
 class FullConfig(BaseModel):
   server: ServerConfig
