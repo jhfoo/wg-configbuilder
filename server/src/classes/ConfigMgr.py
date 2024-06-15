@@ -13,7 +13,7 @@ except ImportError:
 FILE_APP_CONFIG = 'conf/app.yaml'
 KEY_SERVER = 'server'
 KEY_PEERS = 'peers'
-KEY_SERVER_ADDRESS = 'ServerAddress'
+KEY_SERVER_ADDRESS = 'Address'
 KEY_SERVER_ENDPOINT = 'Endpoint'
 KEY_WIREGUARD_CONFIG = 'WireguardConfig'
 KEY_LISTEN_PORT = 'ListenPort'
@@ -29,7 +29,7 @@ class ConfigMgr:
   def saveWireguardConfig(self, NewConfig):
     WgConfig = self.getWireguardConfig()
 
-    WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.ServerAddress
+    WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.Address
     WgConfig[KEY_SERVER][KEY_SERVER_ENDPOINT] = NewConfig.server.Endpoint
     WgConfig[KEY_SERVER][KEY_CLIENT_DEFAULT_DNS] = NewConfig.server.dns
 
