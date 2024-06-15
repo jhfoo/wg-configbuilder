@@ -24,7 +24,7 @@ async def testPath(config: ConfigPath):
   return ConfigMgr.testConfigPath(config.path)
 
 class ServerConfig(BaseModel):
-  ServerAddress: str
+  Address: str
   Endpoint: str
   ListenPort: int
   PersistentKeepalive: int

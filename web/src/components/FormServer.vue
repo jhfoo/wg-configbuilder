@@ -47,13 +47,13 @@
       <q-separator class="q-mt-md" />
 
       <q-item-label class="q-mt-md">AUTHENTICATION</q-item-label>
-      <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PrivateKey" hint="Private key (DO NOT SHARE)" dense filled>
+      <q-input bottom-slots v-model="ServerConfig.Address" class="q-mt-sm" label="PrivateKey" hint="Private key (DO NOT SHARE)" dense filled>
         <template v-slot:before>
           <q-icon name="key" />
         </template>
       </q-input>
 
-      <q-input bottom-slots v-model="ServerAddress" class="q-mt-sm" label="PublicKey" hint="Public key (ok to share)" dense filled>
+      <q-input bottom-slots v-model="ServerConfig.Address" class="q-mt-sm" label="PublicKey" hint="Public key (ok to share)" dense filled>
         <template v-slot:before>
           <q-icon name="public" />
         </template>
@@ -101,11 +101,11 @@ async function onSaveServer() {
   console.log(`onSaveServer()`)
   const resp = await axios.post(getApiBaseUrl() + '/api/config/', {
     server: {
-      ServerAddress: ServerAddress.value ??= '',
-      Endpoint: ServerEndpoint.value ??= '',
-      dns: ServerDns.value,
-      ListenPort: ServerListenPort.value || 0,
-      PersistentKeepalive: ServerPersistentKeepalive.value || 0,
+      Address: props.ServerConfig.Address ??= '',
+      Endpoint: props.ServerConfig.Endpoint ??= '',
+      dns: props.ServerConfig.DNS,
+      ListenPort: props.ServerConfig.ListenPort || 0,
+      PersistentKeepalive: props.ServerConfig.PersistentKeepalive || 0,
     }
   })
   await loadServerConfig()
