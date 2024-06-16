@@ -6,7 +6,6 @@
       <q-btn @click="onSaveConfig" icon="save" dense round flat/>
       <q-btn @click="onAddPeer" icon="add" dense round flat/>
     </q-toolbar>
-    <q-list>
       <q-item @click="onSelectServer" tag="label">
         <q-item-section>
           <q-item-label>Server</q-item-label>
@@ -17,7 +16,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item-label header>PEERS (5)</q-item-label>
+      <q-item-label class="q-mt-md" header>PEERS (5)</q-item-label>
       <!-- @click="onSelectPeer(peer.id)" -->
       <q-item v-for="peer in ComputedPeers" @click.prevent="onSelectPeer(peer.id)" tag="label" >
         <q-item-section>
@@ -30,7 +29,6 @@
           </div>
         </q-item-section>
       </q-item>
-    </q-list>
   </q-card>
 </template>
 
