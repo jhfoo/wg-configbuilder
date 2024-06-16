@@ -3,10 +3,8 @@
     <q-toolbar class="bg-transparent text-teal">
       <q-toolbar-title>Server</q-toolbar-title>
       <q-space />
-      <q-tabs v-model="tab" shrink>
-        <q-tab name="tab2" label="Reset" />
-        <q-tab @click="onSaveServer" name="tab3" label="Save" />
-      </q-tabs>
+      <q-btn name="tab2" label="Reset" dense flat />
+      <q-btn @click="onSaveServer" name="tab3" label="Save" dense flat />
     </q-toolbar>
     <q-card-section>
       <q-item-label>SELF</q-item-label>

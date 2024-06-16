@@ -7,7 +7,7 @@
       <q-btn @click="onAddPeer" icon="add" dense round flat/>
     </q-toolbar>
     <q-list>
-      <q-item tag="label">
+      <q-item @click="onSelectServer" tag="label">
         <q-item-section>
           <q-item-label>Server</q-item-label>
           <q-item-label caption>{{ ComputedServer.Address }}</q-item-label>
@@ -16,17 +16,17 @@
           <q-icon name="home"/>
         </q-item-section>
       </q-item>
-      <q-item-label header>Peers (5)</q-item-label>
-      <q-item v-for="peer in ComputedPeers" tag="label">
+
+      <q-item-label header>PEERS (5)</q-item-label>
+      <!-- @click="onSelectPeer(peer.id)" -->
+      <q-item v-for="peer in ComputedPeers" @click.prevent="onSelectPeer(peer.id)" tag="label" >
         <q-item-section>
           <q-item-label>{{peer.id}}</q-item-label>
           <q-item-label caption>{{peer.Address}}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div>
-            <q-btn dense flat round icon="expand_less"/>
-            <q-btn dense flat round icon="delete"/>
-            <q-btn dense flat round icon="expand_more"/>
+            <q-btn @click.stop="onDeletePeer(peer.id)" dense flat round icon="delete"/>
           </div>
         </q-item-section>
       </q-item>
@@ -38,7 +38,11 @@
 import axios from 'axios'
 import { computed } from 'vue'
 
-const props = defineProps(['config','onAddPeer'])
+const props = defineProps(['config',
+  'onAddPeer',
+  'onSelectPeer',
+  'onSelectServer',
+  'onDeletePeer'])
 const ComputedPeers = computed(() => {
   const ret = Object.keys(props.config.peers).map((PeerId) => {
     return {
@@ -52,6 +56,9 @@ const ComputedServer = computed(() => {
   return props.config.server
 })
 
+function test(PeerId) {
+  console.log(`Test: ${PeerId}`)
+}
 function getApiBaseUrl() {
   const ServicePort = process.env.PROD ? document.location.port : 8000
   return `${document.location.protocol}//${document.location.hostname}:${ServicePort}` 

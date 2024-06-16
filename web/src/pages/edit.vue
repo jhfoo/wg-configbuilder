@@ -8,7 +8,7 @@
       </div>
       <div class="col-4">
         <div class="q-my-md q-mr-md">
-          <FormMain :config="MainConfig" :onAddPeer="onAddPeer" :onSelectPeer="onSelectPeer"/>
+          <FormMain v-bind="FormMainProps"/>
         </div>
       </div>
     </div>
@@ -33,6 +33,13 @@ const MainConfig = ref({
   peers:[],
 })
 const EditProps = ref({})
+const FormMainProps = ref({
+  config: MainConfig,
+  onAddPeer: onAddPeer,
+  onSelectPeer: onSelectPeer,
+  onSelectServer: onSelectServer,
+  onDeletePeer: onDeletePeer,
+})
 
 var EditComponent = null
 
@@ -40,7 +47,16 @@ onMounted(async () => {
   await loadServerConfig()
 })
 
+function onSelectServer() {
+  EditProps.value = {
+    ServerConfig: MainConfig.value.server,
+    loadServerConfig: loadServerConfig,
+  }
+  EditComponent = FormServer
+}
+
 function onSelectPeer(PeerId) {
+  console.log(`[debug] onSelectPeer: ${PeerId}`)
   const CloneStr = JSON.stringify(MainConfig.value.peers[PeerId])
   const PeerClone = JSON.parse(CloneStr)
   PeerClone.id = PeerId
@@ -51,6 +67,15 @@ function onSelectPeer(PeerId) {
     onSavePeer: onSavePeer,
   }
   EditComponent = FormPeer
+}
+
+function onDeletePeer(PeerId) {
+  if ('PeerConfig' in EditProps.value && 'OrigId' in EditProps.value.PeerConfig) {
+    // remove peer as an editable component
+    onSelectServer()
+  }
+
+  delete MainConfig.value.peers[PeerId]
 }
 
 function onSavePeer() {
@@ -103,11 +128,7 @@ async function loadServerConfig() {
   const WgConfig = resp.data
   if ('server' in WgConfig) {
     MainConfig.value = resp.data
-    EditProps.value = {
-      ServerConfig: MainConfig.value.server,
-      loadServerConfig: loadServerConfig,
-    }
-    EditComponent = FormServer
+    onSelectServer()
   }
   console.log(WgConfig)
 } 

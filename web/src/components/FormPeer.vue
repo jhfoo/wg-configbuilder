@@ -3,8 +3,8 @@
     <q-toolbar class="bg-transparent text-teal">
       <q-toolbar-title>Peer</q-toolbar-title>
       <q-space />
-      <q-btn icon="refresh" label="Reload" flat dense />
-      <q-btn @click="onSavePeer" icon="save" label="Save" flat dense />
+      <q-btn icon="refresh" label="Reset" flat dense />
+      <q-btn @click="onSavePeer" icon="save" label="Update" flat dense />
     </q-toolbar>
     <q-card-section>
       <q-item-label>SELF</q-item-label>
