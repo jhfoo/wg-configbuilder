@@ -1,6 +1,7 @@
 # community
 from fastapi import APIRouter
 from pydantic import BaseModel
+from typing import Dict
 
 # custom
 from src.classes.ConfigMgr import ConfigMgr
@@ -28,10 +29,14 @@ class ServerConfig(BaseModel):
   Endpoint: str
   ListenPort: int
   PersistentKeepalive: int
-  dns: str
+  DNS: str
+
+class PeerConfig(BaseModel):
+  Address: str
 
 class FullConfig(BaseModel):
   server: ServerConfig
+  peers: Dict[str, PeerConfig]
 
 @router.get('/')
 async def getConfig():
@@ -41,6 +46,6 @@ async def getConfig():
 async def saveConfig(NewConfig: FullConfig):
   OrigConfig = ConfigMgr.getWireguardConfig()
   print (OrigConfig)
-  print (NewConfig.server)
+  print (NewConfig)
   ConfigMgr.saveWireguardConfig(NewConfig)
   pass

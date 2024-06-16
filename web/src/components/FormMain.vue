@@ -3,9 +3,8 @@
     <q-toolbar class="bg-transparent text-teal">
       <q-toolbar-title>Config</q-toolbar-title>
       <q-space />
-      <q-tabs v-model="tab" shrink>
-        <q-tab @click="onSaveServer" name="tab3" label="Add" />
-      </q-tabs>
+      <q-btn @click="onSaveConfig" icon="save" dense round flat/>
+      <q-btn @click="onAddPeer" icon="add" dense round flat/>
     </q-toolbar>
     <q-list>
       <q-item tag="label">
@@ -21,7 +20,7 @@
       <q-item v-for="peer in ComputedPeers" tag="label">
         <q-item-section>
           <q-item-label>{{peer.id}}</q-item-label>
-          <q-item-label caption>{{peer.ip}}</q-item-label>
+          <q-item-label caption>{{peer.Address}}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div>
@@ -36,13 +35,15 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { computed } from 'vue'
 
-const props = defineProps(['config'])
+const props = defineProps(['config','onAddPeer'])
 const ComputedPeers = computed(() => {
   const ret = Object.keys(props.config.peers).map((PeerId) => {
     return {
-      id: PeerId
+      id: PeerId,
+      Address: props.config.peers[PeerId].Address,
     }
   })
   return ret
@@ -50,4 +51,14 @@ const ComputedPeers = computed(() => {
 const ComputedServer = computed(() => {
   return props.config.server
 })
+
+function getApiBaseUrl() {
+  const ServicePort = process.env.PROD ? document.location.port : 8000
+  return `${document.location.protocol}//${document.location.hostname}:${ServicePort}` 
+}
+
+async function onSaveConfig() {
+  console.log(JSON.stringify(props.config))
+  const resp = await axios.post(getApiBaseUrl() + '/api/config/', props.config)
+}
 </script>

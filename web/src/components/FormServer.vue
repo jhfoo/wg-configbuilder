@@ -90,7 +90,7 @@
 import { computed } from 'vue'
 import axios from 'axios'
 
-const props = defineProps(['ServerConfig'])
+const props = defineProps(['ServerConfig','loadServerConfig'])
 
 function getApiBaseUrl() {
   const ServicePort = process.env.PROD ? document.location.port : 8000
@@ -108,9 +108,6 @@ async function onSaveServer() {
       PersistentKeepalive: props.ServerConfig.PersistentKeepalive || 0,
     }
   })
-  await loadServerConfig()
-  console.log(resp.data)
-  if (resp.data.status === 'ok') {
-  }
+  await props.loadServerConfig()
 }
 </script>
