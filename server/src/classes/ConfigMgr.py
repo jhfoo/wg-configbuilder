@@ -16,6 +16,8 @@ KEY_PEERS = 'peers'
 KEY_PEER_ADDRESS = 'Address'
 KEY_SERVER_ADDRESS = 'Address'
 KEY_SERVER_ENDPOINT = 'Endpoint'
+KEY_PUBLIC_KEY = 'PublicKey'
+KEY_PRIVATE_KEY = 'PrivateKey'
 KEY_WIREGUARD_CONFIG = 'WireguardConfig'
 KEY_LISTEN_PORT = 'ListenPort'
 KEY_CLIENT_DEFAULT_DNS = 'DNS'
@@ -26,61 +28,6 @@ class ConfigMgr:
   async def getStatus(self):
     return {}
 
-  @classmethod
-  def saveWireguardConfig(self, NewConfig):
-    WgConfig = self.getWireguardConfig()
-
-    WgConfig[KEY_SERVER][KEY_SERVER_ADDRESS] = NewConfig.server.Address
-    WgConfig[KEY_SERVER][KEY_SERVER_ENDPOINT] = NewConfig.server.Endpoint
-    WgConfig[KEY_SERVER][KEY_CLIENT_DEFAULT_DNS] = NewConfig.server.DNS
-
-    # default to 51820
-    ListenPort = NewConfig.server.ListenPort or 51820
-    WgConfig[KEY_SERVER][KEY_LISTEN_PORT] = ListenPort
-
-    # default to 30
-    PersistentKeepalive = NewConfig.server.PersistentKeepalive or 30
-    WgConfig[KEY_SERVER][KEY_CLIENT_DEFAULT_KEEPALIVE] = PersistentKeepalive
-
-    # write peers
-    WgConfig[KEY_PEERS] = {}
-    for PeerId in NewConfig.peers.keys():
-      WgConfig[KEY_PEERS][PeerId] = {}
-      if NewConfig.peers[PeerId].Address:
-        WgConfig[KEY_PEERS][PeerId][KEY_PEER_ADDRESS] = NewConfig.peers[PeerId].Address
-
-
-    AppConfig = self.getAppConfig()
-    with open(AppConfig[KEY_WIREGUARD_CONFIG],'w') as outfile:
-      outfile.write(yaml.dump(WgConfig, Dumper = Dumper))
-
-    print (f"Final WgConfig: {WgConfig}")
-
-  @classmethod
-  def getWireguardConfig(self):
-    AppConfig = self.getAppConfig()
-    if AppConfig is None:
-      return None
-
-    if not KEY_WIREGUARD_CONFIG in AppConfig:
-      return None
-
-    if not os.path.isfile(AppConfig[KEY_WIREGUARD_CONFIG]):
-      return None
-
-    with open(AppConfig[KEY_WIREGUARD_CONFIG],'r') as infile:
-      WgConfig = yaml.load(infile.read(), Loader = Loader)
-    
-    if WgConfig is None:
-      WgConfig = {}
-
-    if not KEY_SERVER in WgConfig:
-      WgConfig[KEY_SERVER] = {}
-
-    if (not KEY_PEERS in WgConfig) or (WgConfig[KEY_PEERS] is None):
-      WgConfig[KEY_PEERS] = {}
-
-    return WgConfig
 
   @classmethod
   def getAppConfig(self):
@@ -113,6 +60,22 @@ class ConfigMgr:
       self.saveAppConfig(AppConfig)
 
     return 'ok'
+
+  @classmethod
+  def getWireguardFname(self):
+    AppConfig = self.getAppConfig()
+
+    if AppConfig is None:
+      return None
+
+    if not KEY_WIREGUARD_CONFIG in AppConfig:
+      return None
+
+    if not os.path.isfile(AppConfig[KEY_WIREGUARD_CONFIG]):
+      return None
+
+    print (f"Wireguard fname: {AppConfig[KEY_WIREGUARD_CONFIG]}")
+    return AppConfig[KEY_WIREGUARD_CONFIG]
 
   @classmethod
   def testConfigPath(self, path):

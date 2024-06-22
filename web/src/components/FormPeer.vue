@@ -3,7 +3,6 @@
     <q-toolbar class="bg-transparent text-teal">
       <q-toolbar-title>Peer</q-toolbar-title>
       <q-space />
-      <q-btn icon="refresh" label="Reset" flat dense />
       <q-btn @click="onSavePeer" icon="save" label="Update" flat dense />
     </q-toolbar>
     <q-card-section>
@@ -29,6 +28,20 @@
           <q-icon name="home" />
         </template>
       </q-input>
+
+      <q-item-label class="q-mt-md">AUTHENTICATION</q-item-label>
+      <q-input bottom-slots v-model="PeerConfig.PrivateKey" class="q-mt-sm" label="PrivateKey" hint="Private key (DO NOT SHARE)" dense filled>
+        <template v-slot:before>
+          <q-icon name="key" />
+        </template>
+      </q-input>
+
+      <q-input bottom-slots v-model="PeerConfig.PublicKey" class="q-mt-sm" label="PublicKey" hint="Public key (ok to share)" dense filled>
+        <template v-slot:before>
+          <q-icon name="public" />
+        </template>
+      </q-input>
+      <q-separator class="q-mt-md" />
 
       <q-item-label class="q-mt-md">OPTIONAL</q-item-label>
       <q-input bottom-slots dense filled

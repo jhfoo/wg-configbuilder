@@ -39,6 +39,7 @@ const FormMainProps = ref({
   onSelectPeer: onSelectPeer,
   onSelectServer: onSelectServer,
   onDeletePeer: onDeletePeer,
+  onLoadConfig: loadServerConfig,
 })
 
 var EditComponent = null
@@ -80,18 +81,21 @@ function onDeletePeer(PeerId) {
 
 function onSavePeer() {
   const peers = MainConfig.value.peers
-  if (EditProps.value.PeerConfig.id !== EditProps.value.PeerConfig.OrigId) {
+  const NewConfig = EditProps.value.PeerConfig
+  if (NewConfig.id !== EditProps.value.PeerConfig.OrigId) {
     peers[EditProps.value.PeerConfig.id] = peers[EditProps.value.PeerConfig.OrigId]
-    delete peers[EditProps.value.PeerConfig.OrigId]
+    delete peers[NewConfig.OrigId]
     // this needs to be set so the next Save does not trigger this block
-    EditProps.value.PeerConfig.OrigId = EditProps.value.PeerConfig.id
+    NewConfig.OrigId = NewConfig.id
   }
 
-  console.log(EditProps.value.PeerConfig)
-  const PeerId = EditProps.value.PeerConfig.id
-  peers[PeerId].Address = EditProps.value.PeerConfig.Address
-  console.log(peers[PeerId])
-  console.log(peers)
+  // console.log(EditProps.value.PeerConfig)
+  const PeerId = NewConfig.id
+  peers[PeerId].Address = NewConfig.Address
+  peers[PeerId].PublicKey = NewConfig.PublicKey
+  peers[PeerId].PrivateKey = NewConfig.PrivateKey
+  // console.log(peers[PeerId])
+  // console.log(peers)
 }
 
 function getApiBaseUrl() {
@@ -124,7 +128,7 @@ function getUniquePeerId() {
 }
 
 async function loadServerConfig() {
-  const resp = await axios.get(getApiBaseUrl() + '/api/config/')
+  const resp = await axios.get(getApiBaseUrl() + '/api/wireguard/')
   const WgConfig = resp.data
   if ('server' in WgConfig) {
     MainConfig.value = resp.data

@@ -3,6 +3,7 @@
     <q-toolbar class="bg-transparent text-teal">
       <q-toolbar-title>Config</q-toolbar-title>
       <q-space />
+      <q-btn @click="onLoadConfig" icon="refresh" dense round flat/>
       <q-btn @click="onSaveConfig" icon="save" dense round flat/>
       <q-btn @click="onAddPeer" icon="add" dense round flat/>
     </q-toolbar>
@@ -35,12 +36,15 @@
 <script setup>
 import axios from 'axios'
 import { computed } from 'vue'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
 const props = defineProps(['config',
   'onAddPeer',
   'onSelectPeer',
   'onSelectServer',
-  'onDeletePeer'])
+  'onDeletePeer',
+  'onLoadConfig'])
 const ComputedPeers = computed(() => {
   const ret = Object.keys(props.config.peers).map((PeerId) => {
     return {
@@ -64,6 +68,12 @@ function getApiBaseUrl() {
 
 async function onSaveConfig() {
   console.log(JSON.stringify(props.config))
-  const resp = await axios.post(getApiBaseUrl() + '/api/config/', props.config)
+  const resp = await axios.post(getApiBaseUrl() + '/api/wireguard/config', props.config)
+  $q.notify({
+    message: 'Config saved',
+    icon: 'announcement',
+    timeout: 1500,
+    progress: true,
+  })
 }
 </script>

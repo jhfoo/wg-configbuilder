@@ -30,7 +30,6 @@ class Peer:
     self.attr = {}
 
 class WireguardStatus:
-      
   def __init__(self):
     self.peers = []
 
